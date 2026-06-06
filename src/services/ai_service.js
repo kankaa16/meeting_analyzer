@@ -19,6 +19,12 @@ IMPORTANT RULES:
 - No markdown.
 - No explanation.
 
+SUMMARY RULES:
+
+- Always generate at least one summary item when the transcript contains meaningful discussion.
+- The summary should capture the key outcome of the meeting.
+- Summary must not be empty unless the transcript itself is empty.
+
 ASSIGNEE RULES:
 
 - If a speaker states a task, assign the task to that speaker.

@@ -1,67 +1,105 @@
+import { useEffect, useState } from "react";
+
 import DashboardLayout from "../layouts/dashboard_layout";
 
-function ActionItems() {
-  const items = [
-    {
-      task: "Prepare release notes",
-      assignee: "Alice",
-      status: "PENDING",
-    },
-    {
-      task: "Complete QA testing",
-      assignee: "Bob",
-      status: "IN_PROGRESS",
-    },
-    {
-      task: "Update roadmap",
-      assignee: "Sarah",
-      status: "COMPLETED",
-    },
-  ];
+import {
+  getOverdue,
+} from "../services/action_item_service";
+
+function Overdue() {
+
+  const [items, setItems] =
+    useState([]);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  useEffect(() => {
+    fetchOverdue();
+  }, []);
+
+  const fetchOverdue =
+    async () => {
+      try {
+
+        const res =
+          await getOverdue();
+
+        setItems(
+          res.data.data
+        );
+
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
   return (
     <DashboardLayout>
-      <div className="page-header">
-        <h1 className="page-title">
-          Action Items
-        </h1>
 
-        <button className="neo-btn">
-          + Create
-        </button>
-      </div>
+      <h1 className="page-title">
+        Overdue Tasks
+      </h1>
 
-      <div className="action-list">
-        {items.map((item, index) => (
-          <div
-            key={index}
-            className="neo-card action-row"
-          >
-            <div>
-              <h3>{item.task}</h3>
+      {loading ? (
+        <h3>Loading...</h3>
+      ) : items.length === 0 ? (
+        <div className="neo-card">
+          <h3>
+            No Overdue Tasks !
+          </h3>
+        </div>
+      ) : (
+        <div className="action-list">
 
-              <p>{item.assignee}</p>
-            </div>
+          {items.map(
+            (item) => (
 
-            <select
-              defaultValue={item.status}
-              className="status-select"
-            >
-              <option>PENDING</option>
+              <div
+                key={item._id}
+                className="neo-card action-row"
+              >
+                <div>
 
-              <option>
-                IN_PROGRESS
-              </option>
+                  <h3>
+                    {item.task}
+                  </h3>
 
-              <option>
-                COMPLETED
-              </option>
-            </select>
-          </div>
-        ))}
-      </div>
+                  <p>
+                    Assigned to:
+                    {" "}
+                    {
+                      item.assignee ||
+                      "Unassigned"
+                    }
+                  </p>
+
+                  <p>
+                    Due:
+                    {" "}
+                    {new Date(
+                      item.dueDate
+                    ).toLocaleDateString()}
+                  </p>
+
+                  <p>
+                    Status:
+                    {" "}
+                    {item.status}
+                  </p>
+
+                </div>
+              </div>
+            )
+          )}
+
+        </div>
+      )}
+
     </DashboardLayout>
   );
 }
 
-export default ActionItems;
+export default Overdue;

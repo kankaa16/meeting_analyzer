@@ -1,44 +1,102 @@
+import { useEffect, useState } from "react";
 import DashboardLayout from "../layouts/dashboard_layout";
 import StatCard from "../components/stat_card";
 
+import {
+  getMeetings,
+} from "../services/meeting_service";
+
+import {
+  getActionItems,
+} from "../services/action_item_service";
+
 function Dashboard() {
+  const [meetings, setMeetings] =
+    useState([]);
+
+  const [actionItems, setActionItems] =
+    useState([]);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData =
+    async () => {
+      try {
+        const meetingsRes =
+          await getMeetings();
+
+        const actionRes =
+          await getActionItems();
+
+        setMeetings(
+          meetingsRes.data.data
+        );
+
+        setActionItems(
+          actionRes.data.data
+        );
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+  const completed =
+    actionItems.filter(
+      (item) =>
+        item.status ===
+        "COMPLETED"
+    ).length;
+
+  const pending =
+    actionItems.filter(
+      (item) =>
+        item.status !==
+        "COMPLETED"
+    ).length;
+
   const stats = [
     {
       title: "Meetings",
-      value: 12,
+      value: meetings.length,
       color: "#FFE082",
     },
     {
       title: "Action Items",
-      value: 8,
+      value: actionItems.length,
       color: "#FFCCBC",
     },
     {
       title: "Pending",
-      value: 5,
+      value: pending,
       color: "#C8E6C9",
     },
     {
       title: "Completed",
-      value: "75%",
+      value: completed,
       color: "#D8C4FF",
     },
   ];
 
-  const meetings = [
-    {
-      title: "Sprint Planning",
-      date: "20 May 2026",
-    },
-    {
-      title: "Product Review",
-      date: "22 May 2026",
-    },
-    {
-      title: "Client Sync",
-      date: "25 May 2026",
-    },
-  ];
+  const latestMeeting =
+    meetings.find(
+      (meeting) =>
+        meeting.analysis
+    );
+
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <h2>Loading...</h2>
+      </DashboardLayout>
+    );
+  }
 
   return (
     <DashboardLayout>
@@ -58,92 +116,147 @@ function Dashboard() {
       <div className="dashboard-grid">
         <div className="neo-card">
           <div className="card-header">
-            <h2>Recent Meetings</h2>
-
-            <button className="neo-btn">
-              New Meeting
-            </button>
+            <h2>
+              Recent Meetings
+            </h2>
           </div>
 
-          {meetings.map((meeting) => (
-            <div
-              key={meeting.title}
-              className="meeting-row"
-            >
-              <div>
-                <h4>{meeting.title}</h4>
-                <span>{meeting.date}</span>
-              </div>
+          {meetings.length ===
+          0 ? (
+            <p>
+              No meetings found
+            </p>
+          ) : (
+            meetings
+              .slice(0, 5)
+              .map(
+                (
+                  meeting
+                ) => (
+                  <div
+                    key={
+                      meeting._id
+                    }
+                    className="meeting-row"
+                  >
+                    <div>
+                      <h4>
+                        {
+                          meeting.title
+                        }
+                      </h4>
 
-              <button className="small-btn">
-                View
-              </button>
-            </div>
-          ))}
+                      <span>
+                        {new Date(
+                          meeting.meetingDate
+                        ).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                )
+              )
+          )}
         </div>
 
         <div className="neo-card action-preview">
-          <h2>Action Items</h2>
+          <h2>
+            Action Items
+          </h2>
 
-          <div className="task-item">
-            <span>
-              Prepare release notes
-            </span>
+          {actionItems.length ===
+          0 ? (
+            <p>
+              No action items
+            </p>
+          ) : (
+            actionItems
+              .slice(0, 5)
+              .map(
+                (
+                  item
+                ) => (
+                  <div
+                    key={
+                      item._id
+                    }
+                    className="task-item"
+                  >
+                    <span>
+                      {
+                        item.task
+                      }
+                    </span>
 
-            <div className="status pending">
-              Pending
-            </div>
-          </div>
-
-          <div className="task-item">
-            <span>
-              Final QA Testing
-            </span>
-
-            <div className="status progress">
-              Progress
-            </div>
-          </div>
-
-          <div className="task-item">
-            <span>
-              Update roadmap
-            </span>
-
-            <div className="status done">
-              Done
-            </div>
-          </div>
+                    <div
+                      className="status"
+                    >
+                      {
+                        item.status
+                      }
+                    </div>
+                  </div>
+                )
+              )
+          )}
         </div>
       </div>
 
       <div className="neo-card analysis-preview">
-        <h2>Latest AI Analysis</h2>
+        <h2>
+          Latest AI Analysis
+        </h2>
 
-        <div className="analysis-box">
-          <h4>Summary</h4>
-
+        {!latestMeeting
+          ?.analysis ? (
           <p>
-            Team plans to launch next
-            Friday and finalize release
-            documentation beforehand.
+            No analysis
+            available
           </p>
-        </div>
+        ) : (
+          <>
+            <div className="analysis-box">
+              <h4>
+                Summary
+              </h4>
 
-        <div className="analysis-box">
-          <h4>Decision</h4>
+              <p>
+                {latestMeeting
+                  .analysis
+                  ?.summary?.[0]
+                  ?.text ||
+                  "No summary"}
+              </p>
+            </div>
 
-          <p>
-            Product release approved for
-            next Friday.
-          </p>
-        </div>
+            <div className="analysis-box">
+              <h4>
+                Decision
+              </h4>
 
-        <div className="analysis-box">
-          <h4>Citations</h4>
+              <p>
+                {latestMeeting
+                  .analysis
+                  ?.decisions?.[0]
+                  ?.text ||
+                  "No decisions"}
+              </p>
+            </div>
 
-          <p>00:10 • 00:20 • 01:05</p>
-        </div>
+            <div className="analysis-box">
+              <h4>
+                Action Item
+              </h4>
+
+              <p>
+                {latestMeeting
+                  .analysis
+                  ?.actionItems?.[0]
+                  ?.task ||
+                  "No action items"}
+              </p>
+            </div>
+          </>
+        )}
       </div>
     </DashboardLayout>
   );

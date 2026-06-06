@@ -1,8 +1,21 @@
 import { Link, useLocation } from "react-router-dom";
-
+import {
+  useNavigate,
+} from "react-router-dom";
 function Sidebar() {
   const location = useLocation();
+const navigate =
+  useNavigate();
 
+const handleLogout =
+  () => {
+
+    localStorage.removeItem(
+      "token"
+    );
+
+    navigate("/");
+  };
   const menu = [
     {
       name: "Dashboard",
@@ -12,10 +25,7 @@ function Sidebar() {
       name: "Meetings",
       path: "/meetings",
     },
-    {
-      name: "Analysis",
-      path: "/analysis/1",
-    },
+    
     {
       name: "Action Items",
       path: "/action-items",
@@ -49,9 +59,14 @@ function Sidebar() {
         ))}
       </div>
 
-      <button className="logout-btn">
-        Logout
-      </button>
+      <button
+  className="logout-btn"
+  onClick={
+    handleLogout
+  }
+>
+  Logout
+</button>
     </aside>
   );
 }

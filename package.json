@@ -21,6 +21,9 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.6.3",
     "node-cron": "^4.2.1",
+    "nodemailer": "^8.0.10",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^14.0.0",
     "winston": "^3.19.0",
     "zod": "^4.4.3"

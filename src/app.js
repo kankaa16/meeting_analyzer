@@ -36,4 +36,14 @@ app.use(
   meeting_routes
 );  
 
+const actionItemRoutes =
+  require(
+    "./routes/action_items"
+  );
+
+app.use(
+  "/api/action-items",
+  actionItemRoutes
+);  
+
 module.exports = app;

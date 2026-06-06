@@ -4,6 +4,11 @@ const Meeting = require("../models/meeting");
   analyzeTranscript,
 } = require("../services/ai_service");
 
+const ActionItem =
+  require(
+    "../models/action_item"
+  );
+
 exports.create_meeting = async (
   req,
   res,
@@ -132,6 +137,38 @@ exports.analyze_meeting =
         analysis;
 
       await meeting.save();
+      for (
+  const item of
+  analysis.actionItems
+) {
+  await ActionItem.create({
+  meetingId:
+    meeting._id,
+
+  createdBy:
+    meeting.createdBy,
+
+  task:
+    item.task,
+
+  assignee:
+    item.assignee || "",
+
+  assigneeEmail:
+    item.assignee
+      ? `${item.assignee.toLowerCase()}@gmail.com`
+      : "",
+
+  status:
+    "PENDING",
+
+  dueDate:
+    new Date(
+      Date.now() -
+      24 * 60 * 60 * 1000
+    ),
+});
+}
 
       res.json({
         traceId: req.traceId,
