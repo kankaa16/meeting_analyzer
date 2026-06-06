@@ -218,19 +218,43 @@ POST /api/meetings/:id/analyze
 
 ### Backend
 
-Deployed on Render.
+Deployed on Render : https://meeting-analyzer-1hg4.onrender.com.
 
 ### Frontend
 
-Deployed on Vercel.
+Deployed on Vercel : https://meeting-analyzer02.vercel.app/
 
 ---
+
+## Docker Support
+
+### Build Docker Image:
+
+docker build -t meeting-analyzer .
+
+### Run Container:
+
+docker run --env-file .env -p 8000:8000 meeting-analyzer
+
+## CI/CD
+
+### GitHub Actions is configured to automatically:
+
+### Install dependencies
+
+Run automated tests
+
+Validate code on every push and pull request
+
+### Workflow Location:
+
+.github/workflows/node.yml
 
 ## API Documentation
 
 Swagger documentation available at:
 
-/api-docs
+https://meeting-analyzer-1hg4.onrender.com/api-docs/
 
 ---
 

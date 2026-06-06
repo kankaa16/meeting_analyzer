@@ -42,7 +42,7 @@
 
 [x] Docker support
 
-[] CI/CD pipeline
+[x] CI/CD pipeline
 
 [] Redis caching
 
