@@ -45,6 +45,15 @@ app.use(
   actionItemRoutes
 );  
 
+const evaluationRoutes =
+  require("./routes/evaluation");
+
+app.use(
+  "/api/evaluation",
+  evaluationRoutes
+);
+
 module.exports = app;
 
 app.use(error_handler);
+
