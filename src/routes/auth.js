@@ -76,13 +76,11 @@ router.post(
 
 /**
  * @swagger
- * /meetings:
+ * /auth/login:
  *   post:
- *     summary: Create a meeting
+ *     summary: Login user
  *     tags:
- *       - Meetings
- *     security:
- *       - bearerAuth: []
+ *       - Auth
  *     requestBody:
  *       required: true
  *       content:
@@ -90,20 +88,18 @@ router.post(
  *           schema:
  *             type: object
  *             required:
- *               - title
- *               - transcript
- *               - meetingDate
+ *               - email
+ *               - password
  *             properties:
- *               title:
+ *               email:
  *                 type: string
- *               transcript:
+ *               password:
  *                 type: string
- *               meetingDate:
- *                 type: string
- *                 format: date-time
  *     responses:
- *       201:
- *         description: Meeting created
+ *       200:
+ *         description: Login successful
+ *       400:
+ *         description: Validation error
  */
 router.post(
   "/login",
