@@ -146,3 +146,100 @@ Pros:
 Cons:
 
 * Slightly more boilerplate
+
+
+
+## API Response Strategy
+
+### Selected
+
+Unified Response Format
+
+### Why
+
+* Consistent API responses across all endpoints
+* Easier frontend integration
+* Simplifies debugging and logging
+* Improves maintainability
+
+### Alternatives Considered
+
+* Different response structures for different endpoints
+
+### Trade-Offs
+
+#### Pros
+
+* Predictable API behavior
+* Easier error handling
+* Better developer experience
+
+#### Cons
+
+* Slightly larger response payloads
+
+---
+
+## Documentation Strategy
+
+### Selected
+
+Swagger OpenAPI Documentation
+
+### Why
+
+* Interactive API testing
+* Easy developer onboarding
+* Industry-standard API specification
+* Automatically generated API documentation
+
+### Alternatives Considered
+
+* Postman Collections
+* Manual API documentation
+
+### Trade-Offs
+
+#### Pros
+
+* Interactive documentation
+* Self-documenting APIs
+* Easy testing and debugging
+
+#### Cons
+
+* Requires maintaining route annotations
+
+---
+
+## Deployment Strategy
+
+### Selected
+
+Render (Backend) + Vercel (Frontend)
+
+### Why
+
+* Fast deployment process
+* Free developer tier
+* Automatic GitHub integration
+* Suitable for assignment-scale projects
+
+### Alternatives Considered
+
+* AWS
+* Railway
+* DigitalOcean
+
+### Trade-Offs
+
+#### Pros
+
+* Simple deployment
+* Minimal infrastructure management
+* Easy continuous deployment
+
+#### Cons
+
+* Cold starts on free tier
+* Resource limitations compared to dedicated infrastructure
