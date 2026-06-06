@@ -21,7 +21,25 @@ const options = {
         url:
           "http://localhost:8000/api",
       },
+      {
+        url:
+      "https://meeting-analyzer-1hg4.onrender.com/api",
+      }
     ],
+      security: [
+    {
+      bearerAuth: [],
+    },
+  ],
+    components: {
+  securitySchemes: {
+    bearerAuth: {
+      type: "http",
+      scheme: "bearer",
+      bearerFormat: "JWT",
+    },
+  },
+},
   },
 
   apis: [

@@ -1,7 +1,16 @@
 const express = require("express");
 
 const auth = require("../middleware/auth");
+const {
+  body,
+} = require(
+  "express-validator"
+);
 
+const validate =
+  require(
+    "../middleware/validate"
+  );
 const {
   create_meeting,
   get_meetings,
@@ -24,8 +33,30 @@ router.use(auth);
  *       201:
  *         description: Meeting created
  */
-router.post("/", create_meeting);
+router.post(
+  "/",
+  [
+    body("title")
+      .notEmpty()
+      .withMessage(
+        "Title is required"
+      ),
 
+    body("transcript")
+      .notEmpty()
+      .withMessage(
+        "Transcript is required"
+      ),
+
+    body("meetingDate")
+      .notEmpty()
+      .withMessage(
+        "Meeting date is required"
+      ),
+  ],
+  validate,
+  create_meeting
+);
 /**
  * @swagger
  * /meetings:

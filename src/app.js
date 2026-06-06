@@ -22,7 +22,6 @@ app.get("/health", (req, res) => {
 });
 
 
-app.use(error_handler);
 
 const auth_routes =
   require("./routes/auth");
@@ -47,3 +46,5 @@ app.use(
 );  
 
 module.exports = app;
+
+app.use(error_handler);

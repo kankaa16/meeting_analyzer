@@ -8,12 +8,14 @@ exports.register = async (
   res,
   next
 ) => {
+    console.log("REGISTER HIT");
   try {
     const { name, email, password } =
       req.body;
-
+console.log("1");
     const existing_user =
       await User.findOne({ email });
+console.log("2");
 
     if (existing_user) {
       return res.status(400).json({
@@ -27,12 +29,15 @@ exports.register = async (
 
     const hashed_password =
       await bcrypt.hash(password, 10);
+console.log("3");
 
     const user = await User.create({
       name,
       email,
       password: hashed_password,
     });
+    console.log("4");
+
 
     res.status(201).json({
       traceId: req.traceId,

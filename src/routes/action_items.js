@@ -1,6 +1,15 @@
 const express =
   require("express");
+const {
+  body,
+} = require(
+  "express-validator"
+);
 
+const validate =
+  require(
+    "../middleware/validate"
+  );
 const auth =
   require("../middleware/auth");
 
@@ -19,11 +28,35 @@ router.use(auth);
 
 /**
  * @swagger
- * /action-items:
- *   get:
- *     summary: Get all action items
+ * /action-items/{id}/status:
+ *   patch:
+ *     summary: Update action item status
  *     tags:
  *       - Action Items
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - PENDING
+ *                   - IN_PROGRESS
+ *                   - COMPLETED
+ *     responses:
+ *       200:
+ *         description: Status updated
  */
 router.get(
   "/",
@@ -40,6 +73,18 @@ router.get(
  */
 router.patch(
   "/:id/status",
+  [
+    body("status")
+      .isIn([
+        "PENDING",
+        "IN_PROGRESS",
+        "COMPLETED",
+      ])
+      .withMessage(
+        "Invalid status"
+      ),
+  ],
+  validate,
   update_status
 );
 
