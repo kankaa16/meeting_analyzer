@@ -40,7 +40,7 @@
 
 ## Bonus Milestones
 
-[] Docker support
+[x] Docker support
 
 [] CI/CD pipeline
 
